@@ -21,4 +21,4 @@ const flowerSchema= new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('Example', exampleSchema)
+module.exports = mongoose.model('Flower', flowerSchema)
