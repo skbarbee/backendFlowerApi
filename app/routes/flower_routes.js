@@ -19,7 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
-const flower = require('../models/flower')
+
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -27,6 +27,32 @@ const requireToken = passport.authenticate('bearer', { session: false })
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
+
+
+// INDEX
+// GET /flowers
+router.get('/flowers', requireToken, (req, res, next) => {
+	Flower.find()
+		.then((flowers) => {
+			return flowers.map(flower => flower)
+		})
+		.then((flowers) => res.status(200).json({ flowers: flowers }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+
+// SHOW
+// GET /flowers/5a7db6c74d55bc51bdf39793
+router.get('/flowers/:id', requireToken, (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+	Flower.findById(req.params.id)
+		.then(handle404)
+		// if `findById` is succesful, respond with 200 and "example" JSON
+		.then((flower) => res.status(200).json({ flower: flower }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 // Create
 // /FLOWER
@@ -42,6 +68,22 @@ router.post('/flowers', requireToken, (req, res, next) => {
     .catch(next)
     // .catch(error => next(error))
 
+})
+
+// UPDATE
+// PATCH /flowers/5a7db6c74d55bc51bdf39793
+router.patch('/flowers/:id', requireToken, removeBlanks, (req,res,next)=>{
+	delete req.body.flower.owner
+
+	Flower.findById(req.params.id)
+		.then(handle404)
+		.then((flower)=>{
+			requireOwnership(req, flower)
+			return flower.updateOne(req.body.flower)
+
+		})
+		.then(()=>res.sendStatus(204))
+		.catch(next)
 })
 
 
