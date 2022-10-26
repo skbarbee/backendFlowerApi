@@ -19,6 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+const flower = require('../models/flower')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -30,12 +31,12 @@ const router = express.Router()
 // Create
 // /FLOWER
 router.post('/flowers', requireToken, (req, res, next) => {
-    req.body.pet.owner = req.user.id
+    req.body.flower.owner = req.user.id
 
-    // one the front end I HAVE TO SEND a pet as the top level key
-    // pet: {name: '', type: ''}
+    // one the front end I HAVE TO SEND a flower as the top level key
+    // flower: {name: '', color: ''}
    Flower.create(req.body.flower)
-    .then(pet => {
+    .then(flower => {
         res.status(201).json({ flower: flower })
     })
     .catch(next)
