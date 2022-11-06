@@ -11,6 +11,7 @@ processes = []
 [env]
   PORT = "8080"
   DEPLOYED_URL= mongodb+srv://Sarah:simplePass@gasei.9u3hy4w.mongodb.net/flower-singleUse-API?retryWrites=true&w=majority
+  CLIENT_ORIGIN = "this will be the front end's deployed application"
 
 [experimental]
   allowed_public_ports = []
