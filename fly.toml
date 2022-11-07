@@ -10,7 +10,7 @@ processes = []
 
 [env]
   PORT = "8080"
-  DEPLOYED_URL = "mongodb+srv://Sarah:simplePass@gasei.9u3hy4w.mongodb.net/flower-singleUse-API?retryWrites=true&w=majority"
+  DEPLOYED_URI = "mongodb+srv://Sarah:simplePass@gasei.9u3hy4w.mongodb.net/flower-singleUse-API?retryWrites=true&w=majority"
   CLIENT_ORIGIN = "https://636713f052cfab641e9f2f0e--singleresourceflower.netlify.app"
 
 [experimental]
